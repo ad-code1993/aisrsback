@@ -23,6 +23,7 @@ async def start_srs_session(db: Session = Depends(get_session)):
     now = datetime.utcnow()
     session = SRSSession(session_id=session_id, created_at=now, updated_at=now)
     db.add(session)
+    db.commit()  # Commit the session to ensure the session_id exists in the database
     try:
         ai_response = await srs_chat_agent.run(SRS_BASE_PROMPT.strip())
         if not ai_response or not hasattr(ai_response, "output"):
